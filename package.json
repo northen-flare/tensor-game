@@ -37,6 +37,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"phaser": "^3.55.2",
 		"uuid": "^9.0.0"
 	}
 }
