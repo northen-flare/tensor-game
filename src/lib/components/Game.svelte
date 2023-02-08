@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	
+	import BubbleShooter from '$lib/games/BubbleShooter/game';
 
 	let canvas: HTMLCanvasElement;
 	onMount(async () => {
@@ -9,30 +9,36 @@
 		const PlayScene = (await import('$lib/scenes/playScene')).default;
 		const BreakoutScene = (await import('$lib/scenes/breakoutScene')).default;
 
-		const config = {
-			canvas,
-			type: Phaser.CANVAS,
-			autoFocus: true,
-			width: 800,
-			height: 600,
-			scale: {
-				mode: Phaser.Scale.FIT,
-				autoCenter: Phaser.Scale.CENTER_BOTH,
-				parent: "game-container",
-				autoResize: true
-			},
-			physics: {
-				default: "arcade",
-				arcade: {
-					gravity: { y: 0 },
-					fps: 60,
-					debug: false
-				}
-			},
-			scene: [BreakoutScene]
-		};
+		const context = canvas.getContext('2d');
+		if (!context) return;
 
-		new Phaser.Game(config);
+		const shooter = new BubbleShooter(canvas, context);
+		shooter.startGame();
+
+		// const config = {
+		// 	canvas,
+		// 	type: Phaser.CANVAS,
+		// 	autoFocus: true,
+		// 	width: 800,
+		// 	height: 600,
+		// 	scale: {
+		// 		mode: Phaser.Scale.FIT,
+		// 		autoCenter: Phaser.Scale.CENTER_BOTH,
+		// 		parent: "game-container",
+		// 		autoResize: true
+		// 	},
+		// 	physics: {
+		// 		default: "arcade",
+		// 		arcade: {
+		// 			gravity: { y: 0 },
+		// 			fps: 60,
+		// 			debug: false
+		// 		}
+		// 	},
+		// 	scene: [BreakoutScene]
+		// };
+
+		// new Phaser.Game(config);
 	});
 </script>
 
