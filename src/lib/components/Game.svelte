@@ -7,21 +7,18 @@
 		const Phaser = (await import('phaser')).default;
 		const LoadScene = (await import('$lib/scenes/loadScene')).default;
 		const PlayScene = (await import('$lib/scenes/playScene')).default;
-
-		// const context = canvas.getContext('2d');
+		const BreakoutScene = (await import('$lib/scenes/breakoutScene')).default;
 
 		const config = {
-			type: Phaser.AUTO,
-			parent: "game-container",
+			canvas,
+			type: Phaser.CANVAS,
 			autoFocus: true,
-			width: 400,
-			height: 320,
+			width: 800,
+			height: 600,
 			scale: {
 				mode: Phaser.Scale.FIT,
 				autoCenter: Phaser.Scale.CENTER_BOTH,
 				parent: "game-container",
-				width: 480,
-				height: 320,
 				autoResize: true
 			},
 			physics: {
@@ -32,23 +29,21 @@
 					debug: false
 				}
 			},
-			scene: [LoadScene, PlayScene]
+			scene: [BreakoutScene]
 		};
 
 		new Phaser.Game(config);
 	});
-
-	
 </script>
 
 <div id="game-container" class="container">
-	<!-- <canvas
+	<canvas
 		bind:this={canvas}
 		width={800}
 		height={640}
 	>
 		Your browser does not support the HTML5 canvas tag.
-	</canvas> -->
+	</canvas>
 </div>
 
 <style lang="sass">
