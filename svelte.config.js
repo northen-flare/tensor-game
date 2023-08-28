@@ -8,8 +8,8 @@ const config = {
 	preprocess: preprocess(),
 	kit: {
 		adapter: adapter({
-			pages: "docs",
-			assets: "docs"
+			pages: "../question-server/public",
+			assets: "../question-server/public"
 		}),
 		paths: {
 			base: ''
