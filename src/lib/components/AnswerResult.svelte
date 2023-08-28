@@ -20,9 +20,10 @@
 	<div class="text">
 		Верно! Вы выйграли {possibleWin}
 	</div>
+	<img src="assets/victoryRound.jfif" width="300" alt=""/>
 	{:else}
 	<div class="text">
-		Неверно! Вы проиграли {currentBid}
+		О нет! Вы проиграли {currentBid}
 	</div>
 	<img src="assets/sadCat.jpg" width="300" alt=""/>
 	{/if}
@@ -37,6 +38,7 @@
 	justify-content: center
 	align-items: center
 	gap: 3em
+	position: relative
 
 .text
 	text-align: center

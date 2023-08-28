@@ -16,7 +16,8 @@
 		'QUESTION',
 		'BID',
 		'ANSWER',
-		'END'
+		'END',
+		'END_VICTORY'
 	}
 
 	const API_URL = 'http://127.0.0.1:3000';
@@ -24,6 +25,7 @@
 	const WIN_COEFF = 2;
 	const INITIAL_MONEY = 100;
 	const INITIAL_BID = BID_STEP;
+	const VICTORY_VALUE = 1000;
 
 	let money: number = INITIAL_MONEY;
 	let fase: FaseEnum = FaseEnum.BEGIN;
@@ -59,7 +61,7 @@
 	}
 
 	async function getQuestion(): Promise<IQuestion> {
-		return postData('/questions/random', {}).then(({ data }) => data.question);
+		return postData('/questions/random', { excluded }).then(({ data }) => data.question);
 	}
 
 	function selectAnswer(answer: number): void {
@@ -93,6 +95,8 @@
   }
 
 	function restartGame(): void {
+		money = INITIAL_MONEY;
+		excluded = [];
 		fase = FaseEnum.BEGIN;
 	}
 
@@ -106,7 +110,7 @@
 
 		token = newToken;
 		answerResult = result;
-		getInfo();
+		await getInfo();
 	}
 
 	async function getInfo(): Promise<void> {
@@ -117,7 +121,11 @@
 
 	async function showResult(): Promise<void> {
 		await sendAnswer();
-		fase = FaseEnum.ANSWER;
+		fase = money <= 0
+			? FaseEnum.END
+			: money >= VICTORY_VALUE
+				? FaseEnum.END_VICTORY
+				: FaseEnum.ANSWER;
 	}
 
 	async function nextQuestion(): Promise<void> {
@@ -131,6 +139,7 @@
 </script>
 
 <div id="game-container" class="container">
+	<img class="game-background" src="assets/background.jpg" alt=""/>	
 	{#if ![FaseEnum.BEGIN, FaseEnum.RULES, FaseEnum.END].includes(fase)}
 		<h3 class="money">Деньги: {money}</h3>
 	{/if}
@@ -172,20 +181,35 @@
     <AnswerResult answerResult={answerResult} currentBid={currentBid} on:nextQuestion={nextQuestion} />
 	{/if}
 	{#if fase === FaseEnum.END}
-    
     <div class="main">
-      <h1>Вы проиграли</h1>
+      <h1 class="major-text">Вы проиграли</h1>
+			<img src="assets/game-over.png" width="400" alt=""/>
       <button class="button" on:click={restartGame}>Начать сначала</button>
+    </div>
+	{/if}
+	{#if fase === FaseEnum.END_VICTORY}
+    <div class="main">
+      <div class="major-text">
+				Победа!<br/>
+				Можно отправляться домой!
+			</div>
+
+			<img src="assets/endVictory.jpg" width="400" alt=""/>
     </div>
 	{/if}
 </div>
 
 <style lang="sass">
 .container
-  background-image: url('assets/background.jpg')
   width: 100%
-  background-repeat: no-repeat
-  background-size: cover
+  height: 100vh
+  overflow-y: hidden
+
+  .game-background
+    width: 100vw
+    height: 100vh
+    position: absolute
+
 
   .money
     color: #fff
@@ -193,6 +217,7 @@
     font-size: 24px
     font-weight: bold
     line-height: 1.4em
+    position: relative
 
   .bid-container
     display: flex
@@ -214,6 +239,7 @@
     justify-content: center
     align-items: center
     gap: 3em
+    position: relative
 
   .question
     width: 50%
@@ -228,8 +254,9 @@
 
   .question-options
     display: grid
-    grid-template-columns: 1fr
+    grid-template-columns: 1fr 1fr
     gap: 16px
+    padding: 20px
 
   .question-option
     background-color: #000

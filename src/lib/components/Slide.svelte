@@ -27,6 +27,7 @@
   justify-content: center
   align-items: center
   gap: 3em
+  position: relative
 
   .content
     width: 50%
