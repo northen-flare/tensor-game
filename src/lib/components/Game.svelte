@@ -20,7 +20,7 @@
 		'END_VICTORY'
 	}
 
-	const API_URL = 'http://127.0.0.1:3000';
+	const API_URL = 'http://localhost:3000';
 	const BID_STEP = 20;
 	const WIN_COEFF = 2;
 	const INITIAL_MONEY = 100;
