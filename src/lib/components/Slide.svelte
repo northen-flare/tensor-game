@@ -30,6 +30,7 @@
   align-items: center
   gap: 3em
   position: relative
+  overflow-x: hidden
 
   .content
     width: 50%

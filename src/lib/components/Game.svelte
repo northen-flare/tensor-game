@@ -6,8 +6,6 @@
 	import type { IQuestion } from '$lib/interfaces/Question';
 	import Question from './Question.svelte';
 
-
-
 	enum FaseEnum {
 		'BEGIN',
     'RULES',
