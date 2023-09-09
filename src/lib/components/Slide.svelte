@@ -13,7 +13,9 @@
 
 <div class="main">
 	<div class="content">
-		{contentText}
+    <div>
+      {contentText}
+    </div>
 	</div>
 	<button class="button" on:click={handleContinue}>{buttonText}</button>
 </div>
@@ -42,11 +44,24 @@
 
   .button
     background-color: #000
-    padding: 0.5em
+    padding: 1em
     width: max-content
     color: #ffF
     border-radius: 0.5em
     font-weight: bold
     cursor: pointer
+
+  @media screen and (max-width: 48em)
+    .content
+      width: 100%
+      font-size: 20px
+
+      div
+        margin: 20px
+
+    .button
+      width: 100%
+      position: fixed
+      bottom: 0
 		
 </style>

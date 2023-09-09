@@ -3,12 +3,10 @@
   import IntroText from '$lib/data/intro.txt?raw';
   import RulesText from '$lib/data/rules.txt?raw';
 	import AnswerResult from './AnswerResult.svelte';
+	import type { IQuestion } from '$lib/interfaces/Question';
+	import Question from './Question.svelte';
 
-	interface IQuestion {
-		id: number;
-		text: string;
-		options: string[];
-	}
+
 
 	enum FaseEnum {
 		'BEGIN',
@@ -64,8 +62,8 @@
 		return postData('/questions/random', { excluded }).then(({ data }) => data.question);
 	}
 
-	function selectAnswer(answer: number): void {
-		currentAnswer = answer;
+	function selectAnswer({ detail }: { detail: number}): void {
+		currentAnswer = detail;
 		fase = FaseEnum.BID;
 	}
 
@@ -150,14 +148,7 @@
     <Slide contentText={RulesText} buttonText={'Вперёд'} on:continue={startGame}/>
 	{/if}
 	{#if fase === FaseEnum.QUESTION}
-  <div class="main">
-    <div class="question">{currentQuestion.text}</div>
-		<div class="question-options">
-      {#each currentQuestion.options as option, index (index)}
-      <button class="question-option" on:click={() => selectAnswer(index)}>{option}</button>
-			{/each}
-		</div>
-  </div>
+	<Question question={currentQuestion} on:select={selectAnswer} />
 	{/if}
 	{#if fase === FaseEnum.BID}
   <div class="main">
@@ -165,17 +156,17 @@
       <img src="assets/getYourBid.png" width="300" alt=""/>
       <div>Делайте ваши ставки</div>
     </div>
-    <div class="major-text">
-        <div>Текущая ставка: {currentBid}</div>
-        <div>Вы можете выиграть: {possibleWin}</div>
-      </div>
-      <div>
-        <button class="button" on:click={dropAnswer}>Назад</button>
-        <button class="button" on:click={decreaseTheBid}>Опустить ставку</button>
-        <button class="button" on:click={increaseTheBid}>Поднять ставку</button>
-        <button class="button" on:click={showResult}>Сделано</button>
-      </div>
+		<div class="major-text">
+				<div>Текущая ставка: {currentBid}</div>
+				<div>Вы можете выиграть: {possibleWin}</div>
 		</div>
+		<div>
+			<button class="button" on:click={dropAnswer}>Назад</button>
+			<button class="button" on:click={decreaseTheBid}>Опустить ставку</button>
+			<button class="button" on:click={increaseTheBid}>Поднять ставку</button>
+			<button class="button" on:click={showResult}>Сделано</button>
+		</div>
+	</div>
 	{/if}
 	{#if fase === FaseEnum.ANSWER}
     <AnswerResult answerResult={answerResult} currentBid={currentBid} on:nextQuestion={nextQuestion} />
@@ -240,30 +231,6 @@
     align-items: center
     gap: 3em
     position: relative
-
-  .question
-    width: 50%
-    text-align: center
-    font-size: 24px
-    font-weight: bold
-    line-height: 1.4em
-    color: #fff
-    background-color: rgba(0,0,0,0.5)
-    padding: 20px
-    border-radius: 0.5em
-
-  .question-options
-    display: grid
-    grid-template-columns: 1fr 1fr
-    gap: 16px
-    padding: 20px
-
-  .question-option
-    background-color: #000
-    color: #fff
-    padding: 10px 20px
-    border-radius: 0.5em
-    cursor: pointer
 
   .button
     background-color: #000
