@@ -1,7 +1,9 @@
 <script lang="ts">
   import Slide from './Slide.svelte';
   import IntroText from '$lib/data/intro.txt?raw';
+	import Intro2Text from '$lib/data/intro2.txt?raw';
   import RulesText from '$lib/data/rules.txt?raw';
+	
 	import AnswerResult from './AnswerResult.svelte';
 	import type { IQuestion } from '$lib/interfaces/Question';
 	import Question from './Question.svelte';
@@ -10,6 +12,8 @@
 		'BEGIN',
     'RULES',
 		'QUESTION',
+		'INTRO',
+		'DAGESTAN',
 		'BID',
 		'ANSWER',
 		'END',
@@ -81,9 +85,17 @@
 		}
 	}
 
-	async function getRules(): Promise<void> {
+	async function goDagestanIntro(): Promise<void> {
 		await register();
-    fase = FaseEnum.RULES;
+    fase = FaseEnum.DAGESTAN;
+	}
+
+	function goIntro(): void {
+		fase = FaseEnum.RULES;
+	}
+	
+	function getRules(): void {
+		fase = FaseEnum.RULES;
 	}
   
   async function startGame(): Promise<void> {
@@ -140,7 +152,17 @@
 		<h3 class="money">Деньги: {money}</h3>
 	{/if}
 	{#if fase === FaseEnum.BEGIN}
-    <Slide contentText={IntroText} buttonText={'Ладно'} on:continue={getRules}/>
+    <Slide contentText={IntroText} buttonText={'Где же мы?'} on:continue={goDagestanIntro}/>
+	{/if}
+	{#if fase === FaseEnum.DAGESTAN}
+		<div class="main">
+      <h2 class="major-text">Стоп..это что... ДАГЕСТАН?!</h2>
+			<img src="assets/dagestan.jpg" width="400" alt=""/>
+      <button class="button" on:click={goIntro}>Надо же...</button>
+    </div>
+	{/if}
+	{#if fase === FaseEnum.INTRO}
+    <Slide contentText={Intro2Text} buttonText={'Ладно'} on:continue={getRules}/>
 	{/if}
   {#if fase === FaseEnum.RULES}
     <Slide contentText={RulesText} buttonText={'Вперёд'} on:continue={startGame}/>
