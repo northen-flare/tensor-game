@@ -18,7 +18,7 @@
 <div class="main">
 	{#if answerResult}
 	<div class="text">
-		Верно! Вы выйграли {possibleWin}
+		Верно! Вы выиграли {possibleWin}
 	</div>
 	<img src="assets/victoryRound.jfif" width="300" alt=""/>
 	{:else}
